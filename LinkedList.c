@@ -151,6 +151,40 @@ void popFront(List *lst)
     free(temp); // dealocating memory for the deleted element
 }
 
+int size(List *lst)
+{
+    int count = 0;
+    Node *current = lst->head;
+    while (current)
+    {
+        current = current->next;
+        count++;
+    }
+
+    return count;
+}
+
+void reverseList(List *lst)
+{
+    if (empty(lst) || lst->head == lst->tail)
+        return;
+
+    Node *current = lst->head, *temp, *prev = NULL;
+
+    lst->tail = lst->head;  //after reversing the list, head will be the tail
+
+    while (current)
+    {
+        temp = current->next; // keep track for the next element
+        current->next = prev; // delinking the current list
+        prev = current;       // reversing the list,
+        current = temp;       // updating current
+    }
+
+    lst->head = prev;   //head of the reversed list
+    lst->tail->next = NULL;   //end of the list
+}
+
 void display(List *lst)
 {
     if (empty(lst))
@@ -183,15 +217,21 @@ int main()
 {
     List *lst = createList();
     pushBack(lst, 1);
-    // pushBack(lst, 2);
-    // pushBack(lst, 3);
-    // pushBack(lst, 4);
+    pushBack(lst, 2);
+    pushBack(lst, 3);
+    pushBack(lst, 4);
 
     // pushMiddle(lst, 3, 77);
 
     // popBack(lst);
 
     // popFront(lst);
+
+    // printf("%d\n", size(lst));
+
+    // reverseList(lst);
+
+    // pushBack(lst, 5);
 
     display(lst);
 }

@@ -112,6 +112,13 @@ void popBack(List *lst)
         printf("Empty List\n");
         return;
     }
+    if (lst->head == lst->tail) // Single Element
+    {
+        free(lst->head);
+        lst->head = lst->tail = NULL;
+        return;
+    }
+
     Node *current = lst->head;
     while (current->next != lst->tail)
     {
@@ -122,7 +129,7 @@ void popBack(List *lst)
     current->next = NULL; // removing last element
     lst->tail = current;
 
-    free(temp); // dealocating memory for the deleted element
+    free(temp); // dealocating memory for the deleted element}
 }
 
 void popFront(List *lst)
@@ -132,7 +139,7 @@ void popFront(List *lst)
         printf("Empty List\n");
         return;
     }
-    if (lst->head == lst->tail)
+    if (lst->head == lst->tail) // Single Element
     {
         free(lst->head);
         lst->head = lst->tail = NULL;
@@ -164,15 +171,15 @@ int main()
 {
     List *lst = createList();
     pushBack(lst, 1);
-    pushBack(lst, 2);
-    pushBack(lst, 3);
-    pushBack(lst, 4);
+    // pushBack(lst, 2);
+    // pushBack(lst, 3);
+    // pushBack(lst, 4);
 
     // pushMiddle(lst, 3, 77);
 
-    popBack(lst);
+    // popBack(lst);
 
-    popFront(lst);
+    // popFront(lst);
 
     display(lst);
 }

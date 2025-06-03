@@ -167,6 +167,18 @@ void display(List *lst)
     printf("\n");
 }
 
+void freeList(List *lst)
+{
+    Node *current = lst->head;
+    while (current)
+    {
+        Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(lst);
+}
+
 int main()
 {
     List *lst = createList();

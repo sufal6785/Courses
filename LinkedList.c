@@ -105,6 +105,45 @@ void pushMiddle(List *lst, int key, int data)
     }
 }
 
+void popBack(List *lst)
+{
+    if (empty(lst))
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *current = lst->head;
+    while (current->next != lst->tail)
+    {
+        current = current->next;
+    }
+    Node *temp = lst->tail; // to keep the address of the tail
+
+    current->next = NULL; // removing last element
+    lst->tail = current;
+
+    free(temp); // dealocating memory for the deleted element
+}
+
+void popFront(List *lst)
+{
+    if (empty(lst))
+    {
+        printf("Empty List\n");
+        return;
+    }
+    if (lst->head == lst->tail)
+    {
+        free(lst->head);
+        lst->head = lst->tail = NULL;
+        return;
+    }
+    Node *temp = lst->head;      // to keep the adress of head
+    lst->head = lst->head->next; // removing last element
+
+    free(temp); // dealocating memory for the deleted element
+}
+
 void display(List *lst)
 {
     if (empty(lst))
@@ -129,7 +168,11 @@ int main()
     pushBack(lst, 3);
     pushBack(lst, 4);
 
-    pushMiddle(lst, 3, 77);
+    // pushMiddle(lst, 3, 77);
+
+    popBack(lst);
+
+    popFront(lst);
 
     display(lst);
 }

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_SIZE 10
 
 typedef struct Stack
 {
@@ -12,7 +11,7 @@ typedef struct Stack
 Stack *createStack()
 {
     Stack *stack = (Stack *)malloc(sizeof(Stack));
-    stack->capacity = MAX_SIZE;
+    stack->capacity = 1;
     stack->top = -1;
     stack->array = (int *)malloc(stack->capacity * sizeof(int));
 
@@ -29,12 +28,17 @@ int full(Stack *stack)
     return stack->top == stack->capacity - 1;
 }
 
+void reSize(Stack *stack)
+{
+    stack->capacity *= 2;
+    stack->array = (int *)realloc(stack->array, stack->capacity * sizeof(int));
+}
+
 void push(Stack *stack, int data)
 {
     if (full(stack))
     {
-        printf("Stack Overflow\n");
-        return;
+        reSize(stack);
     }
     stack->array[++stack->top] = data;
 }
@@ -95,18 +99,16 @@ int main()
 {
     Stack *stack = createStack();
 
-    push(stack, 1);
-    push(stack, 2);
-    push(stack, 9);
-    push(stack, 7);
+    // push(stack, 1);
+    // push(stack, 2);
+    // push(stack, 9);
+    // push(stack, 7);
 
-    printf("%d\n", pop(stack));
+    // printf("%d\n",pop(stack));
 
-    printf("%d\n", top(stack));
+    // printf("%d\n",top(stack));
 
     printf("%d\n", size(stack));
 
     display(stack);
-
-    free(stack);
 }

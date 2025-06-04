@@ -234,4 +234,6 @@ int main()
     // pushBack(lst, 5);
 
     display(lst);
+
+    freeList(lst);
 }

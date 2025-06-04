@@ -74,6 +74,19 @@ int top(Stack *stack)
     return stack->top->data;
 }
 
+int size(Stack *stack)
+{
+    int count = 0;
+    Node *current = stack->top;
+    while (current)
+    {
+        count++;
+        current = current->next;
+    }
+
+    return count;
+}
+
 void display(Stack *stack)
 {
     if (empty(stack))

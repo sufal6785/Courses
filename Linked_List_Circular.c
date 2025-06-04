@@ -122,7 +122,6 @@ void popFront(List *lst)
     current->next = lst->head->next;
     lst->head = lst->head->next;
 
-
     free(temp);
 }
 
@@ -134,7 +133,7 @@ int size(List *lst)
     {
         current = current->next;
         count++;
-    }while(current != lst->head);
+    } while (current != lst->head);
 
     return count;
 }
@@ -151,6 +150,17 @@ void display(List *lst)
     {
         printf("%d ", current->data);
         current = current->next;
+    } while (current != lst->head);
+}
+
+void freeList(List *lst)
+{
+    Node *current = lst->head;
+    do
+    {
+        Node *temp = current;
+        current = current->next;
+        free(temp);
     } while (current != lst->head);
 }
 
@@ -171,4 +181,5 @@ int main()
     // printf("%d\n",size(lst));
 
     display(lst);
+    freeList(lst);
 }

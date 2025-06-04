@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<limits.h>
 #define MAX_SIZE 10
 
 typedef struct Stack
@@ -44,7 +45,7 @@ int pop(Stack *stack)
     if (empty(stack))
     {
         printf("Stack Underflow\n");
-        return -1;
+        return INT_MIN;
     }
     return stack->array[stack->top--];
 }
@@ -54,7 +55,7 @@ int top(Stack *stack)
     if (empty(stack))
     {
         printf("Empty Stack");
-        return -1;
+        return INT_MIN;
     }
     return stack->array[stack->top];
 }
@@ -95,16 +96,18 @@ int main()
 {
     Stack *stack = createStack();
 
-    push(stack, 1);
-    push(stack, 2);
-    push(stack, 9);
-    push(stack, 7);
+    // push(stack, 1);
+    // push(stack, 2);
+    // push(stack, 9);
+    // push(stack, 7);
 
-    printf("%d\n", pop(stack));
+    // printf("%d\n", pop(stack));
 
-    printf("%d\n", top(stack));
+    // printf("%d\n", top(stack));
 
-    printf("%d\n", size(stack));
+    // printf("%d\n", size(stack));
+
+    printf("%d\n",pop(stack));
 
     display(stack);
 

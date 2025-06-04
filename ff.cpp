@@ -1,5 +1,6 @@
 #include<iostream>
 #include<list>
+#include<stack>
 
 using namespace std;
 
@@ -8,4 +9,7 @@ int main(){
     lst.pop_back();
     lst.push_back(1);
     cout<<lst.front()<<endl;
+
+    stack<int> stack;
+    stack.pop();
 }

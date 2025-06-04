@@ -94,6 +94,7 @@ void popBack(List *lst)
     {
         free(lst->head);
         lst->head = lst->tail = NULL;
+        return;
     }
 
     Node *current = lst->tail->prev;
@@ -115,6 +116,7 @@ void popFront(List *lst)
     {
         free(lst->head);
         lst->head = lst->tail = NULL;
+        return;
     }
 
     Node *current = lst->head;

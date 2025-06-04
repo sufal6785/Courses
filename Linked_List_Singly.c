@@ -77,7 +77,7 @@ Node *findNode(List *lst, int key)
     return current;
 }
 
-void pushMiddle(List *lst, int key, int data)
+void insert(List *lst, int key, int data)
 {
     Node *targetNode = findNode(lst, key);
     if (!targetNode)
@@ -221,7 +221,7 @@ int main()
     pushBack(lst, 3);
     pushBack(lst, 4);
 
-    // pushMiddle(lst, 3, 77);
+    // insert(lst, 3, 77);
 
     // popBack(lst);
 

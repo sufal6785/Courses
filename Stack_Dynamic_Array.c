@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<limits.h>
 
 typedef struct Stack
 {
@@ -48,7 +49,7 @@ int pop(Stack *stack)
     if (empty(stack))
     {
         printf("Stack Underflow\n");
-        return -1;
+        return INT_MIN;
     }
     return stack->array[stack->top--];
 }
@@ -58,7 +59,7 @@ int top(Stack *stack)
     if (empty(stack))
     {
         printf("Empty Stack");
-        return -1;
+        return INT_MIN;
     }
     return stack->array[stack->top];
 }

@@ -111,5 +111,5 @@ int main()
 
     display(stack);
 
-    free(stack);
+    freeStack(stack);
 }

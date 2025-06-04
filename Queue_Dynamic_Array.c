@@ -34,16 +34,18 @@ int full(Queue *queue)
 void reSize(Queue *queue)
 {
     int size = queue->capacity;
-    queue->capacity *= 2;
+    queue->capacity *= 2;   //double the capacity
+
+    //reallocate the array
     queue->array = (int *)realloc(queue->array, queue->capacity * sizeof(int));
 
-    if (queue->front > queue->rear)
+    if (queue->front > queue->rear) //when the queue is wrapped
     {
         for (int i = 0; i < queue->front; i++)
         {
-            queue->array[i + size] = queue->array[i];
+            queue->array[i + size] = queue->array[i];   //move the elements after the front
         }
-        queue->rear += size;
+        queue->rear += size;    //update rear
     }
 }
 

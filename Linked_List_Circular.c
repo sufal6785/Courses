@@ -4,30 +4,27 @@
 typedef struct Node
 {
     int data;
-    struct Node *next, *prev;
+    struct Node *next;
 } Node;
 
 Node *createNode(int data)
 {
-    Node *newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    newNode->prev = NULL;
+    Node *currentNode = (Node *)malloc(sizeof(Node));
+    currentNode->data = data;
+    currentNode->next = currentNode;
 
-    return newNode;
+    return currentNode;
 }
 
 typedef struct List
 {
     Node *head;
-    Node *tail;
 } List;
 
 List *createList()
 {
     List *lst = (List *)malloc(sizeof(List));
     lst->head = NULL;
-    lst->tail = NULL;
 
     return lst;
 }
@@ -42,13 +39,17 @@ void pushBack(List *lst, int data)
     Node *newNode = createNode(data);
     if (empty(lst))
     {
-        lst->head = lst->tail = newNode;
+        lst->head = newNode;
     }
     else
     {
-        newNode->prev = lst->tail;
-        lst->tail->next = newNode;
-        lst->tail = newNode;
+        Node *current = lst->head;
+        while (current->next != lst->head)
+        {
+            current = current->next;
+        }
+        current->next = newNode;
+        newNode->next = lst->head;
     }
 }
 
@@ -57,22 +58,25 @@ void pushFront(List *lst, int data)
     Node *newNode = createNode(data);
     if (empty(lst))
     {
-        lst->head = lst->tail = newNode;
+        lst->head = newNode;
     }
     else
     {
+        Node *current = lst->head;
+        while (current->next != lst->head)
+        {
+            current = current->next;
+        }
+        current->next = newNode;
         newNode->next = lst->head;
-        lst->head->prev = newNode;
         lst->head = newNode;
     }
 }
 
 Node *findNode(List *lst, int key)
 {
-    if (empty(lst))
-    {
+    if (!lst->head)
         return NULL;
-    }
     Node *current = lst->head;
     while (current && current->data != key)
     {
@@ -90,17 +94,15 @@ void popBack(List *lst)
         return;
     }
 
-    if (lst->head == lst->tail)
+    Node *current = lst->head, *prev = lst->head;
+    while (current->next != lst->head)
     {
-        free(lst->head);
-        lst->head = lst->tail = NULL;
+        prev = current;
+        current = current->next;
     }
+    prev->next = current->next;
 
-    Node *current = lst->tail->prev;
-    current->next = NULL;
-    free(lst->tail);
-
-    lst->tail = current;
+    free(current);
 }
 
 void popFront(List *lst)
@@ -111,27 +113,28 @@ void popFront(List *lst)
         return;
     }
 
-    if (lst->head == lst->tail)
-    {
-        free(lst->head);
-        lst->head = lst->tail = NULL;
-    }
-
     Node *current = lst->head;
+    while (current->next != lst->head)
+    {
+        current = current->next;
+    }
+    Node *temp = lst->head;
+    current->next = lst->head->next;
     lst->head = lst->head->next;
 
-    free(current);
+
+    free(temp);
 }
 
 int size(List *lst)
 {
     int count = 0;
     Node *current = lst->head;
-    while (current)
+    do
     {
-        count++;
         current = current->next;
-    }
+        count++;
+    }while(current != lst->head);
 
     return count;
 }
@@ -144,41 +147,26 @@ void display(List *lst)
         return;
     }
     Node *current = lst->head;
-    while (current)
+    do
     {
         printf("%d ", current->data);
         current = current->next;
-    }
-    printf("\n");
-}
-
-void freeList(List *lst)
-{
-    Node *current = lst->head;
-    while (current)
-    {
-        Node *temp = current;
-        current = current->next;
-        free(temp);
-    }
-
-    free(lst);
+    } while (current != lst->head);
 }
 
 int main()
 {
     List *lst = createList();
-
     pushBack(lst, 1);
     pushBack(lst, 2);
     pushBack(lst, 3);
+    pushBack(lst, 4);
 
     // pushFront(lst, 77);
 
     // popBack(lst);
 
     // popFront(lst);
-    // pushBack(lst,77);
 
     // printf("%d\n",size(lst));
 

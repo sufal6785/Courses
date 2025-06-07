@@ -32,7 +32,9 @@ public:
 
     void pop(int);
 
-    void print_list();
+    void reverse();
+
+    void display();
 
     ~List()
     {
@@ -53,7 +55,7 @@ int List::size()
     return size_n;
 }
 
-// push a data at the front of the list
+// push a data at the end of the list
 void List::push_back(int val)
 {
     Node *newNode = new Node(val);
@@ -71,7 +73,7 @@ void List::push_back(int val)
     size_n++;
 }
 
-// push a data at the end of the list
+// push a data at first index
 void List::push_front(int val)
 {
     Node *newNode = new Node(val);
@@ -119,6 +121,7 @@ void List::insert(int val, int position)
     Node *newNode = new Node(val);
 
     newNode->next = current->next;
+    newNode->next->prev = newNode; // backward link
     newNode->prev = current;
     current->next = newNode;
 
@@ -155,7 +158,8 @@ void List::pop_front()
 {
     if (head == nullptr)
     {
-        throw runtime_error("empty list");
+        cout<<"Empty List"<<endl;
+        return;
     }
 
     else if (head == tail)
@@ -206,11 +210,36 @@ void List ::pop(int key)
     }
     Node *temp = current;
     current->prev->next = current->next; // skipping the current node
+    current->next->prev = current->prev; // backward link
     delete temp;                         // dealloacte memory for the current node
+
+    size_n--;
+}
+
+// to reverse a list
+void List ::reverse()
+{
+    // time O(n) and space O(1)
+    if (!head || !head->next) // empty or single element
+    {
+        return;
+    }
+
+    Node *newHead = tail, *newTail = head, *current = head;
+    while (current)
+    {
+        //swapping the next and prev pointers
+        Node *temp = current->next;
+        current->next = current->prev;
+        current->prev = temp;
+        current = temp;
+    }
+    head = newHead;
+    tail = newTail;
 }
 
 // print the list
-void List::print_list()
+void List::display()
 {
     if (!head)
     {
@@ -229,13 +258,15 @@ void List::print_list()
 int main()
 {
     List lst;
-    // lst.push_back(1);
-    // lst.push_back(2);
-    // lst.push_back(3);
-    // lst.push_back(4);
+    lst.push_back(1);
+    lst.push_back(2);
+    lst.push_back(3);
+    lst.push_back(4);
 
-    // lst.insert(7, 3);
-    // lst.pop(5);
-    cout << lst.size() << endl;
-    lst.print_list();
+    lst.insert(7, 3);
+    lst.pop(3);
+    // cout << lst.size() << endl;
+    lst.reverse();
+    lst.reverse();
+    lst.display();
 }

@@ -3,6 +3,13 @@ Friend function is used in this program.
 Overload operator by friend function gives more flexibility than
 overload by memberfunction*/
 
+/*When there is need implicit conversion like (class + int), then friend is suitable.
+When only need only left hand access, the the member function is best choice.
+But for the need of access both, friend is best choice.
+In this function member is best choice, but I did it using friend just for learning purposes.*/
+
+//here assignment operator(=) is missing***
+
 #include <iostream>
 using namespace std;
 

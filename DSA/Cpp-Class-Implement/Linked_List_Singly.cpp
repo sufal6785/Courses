@@ -44,9 +44,12 @@ public:
 
     int size();
 
+    void reverse();
+
     void display();
 };
 
+// push a data at the end of the list
 void List::push_back(int data)
 {
     Node *newNode = new Node(data); // allocating memory for  node
@@ -62,6 +65,7 @@ void List::push_back(int data)
     size_n++;
 }
 
+// push a data at first index
 void List::push_front(int data)
 {
     Node *newNode = new Node(data);
@@ -77,7 +81,8 @@ void List::push_front(int data)
     size_n++;
 }
 
-void List::insert(int data, int position) // 0 based indexing
+// insert a data at a given position(0 based index)
+void List::insert(int data, int position)
 {
     if (position < 0 || position > size())
     {
@@ -111,6 +116,7 @@ void List::insert(int data, int position) // 0 based indexing
     size_n++;
 }
 
+// remove the last element
 void List::pop_back()
 {
     if (head == nullptr) // empty list
@@ -139,6 +145,7 @@ void List::pop_back()
     size_n--;
 }
 
+// remove the first element
 void List::pop_front()
 {
     if (head == nullptr) // empty list
@@ -162,9 +169,10 @@ void List::pop_front()
     size_n--;
 }
 
+// remove a given data on first occurance
 void List::pop(int key)
 {
-    if (!head)  //empty list
+    if (!head) // empty list
     {
         cout << "Empty List" << endl;
         return;
@@ -202,11 +210,34 @@ void List::pop(int key)
     size_n--;
 }
 
+// return the size of the list
 int List::size()
 {
     return size_n;
 }
 
+// to reverse a list
+void List ::reverse()
+{
+    if (!head || !head->next) // empty or single element
+    {
+        return;
+    }
+    Node *newHead = tail, *newTail = head, *current = head, *prev = nullptr;
+    while (current)
+    {
+        // swap prev and next pointer and update current = current->next
+        Node *temp = current->next;
+        current->next = prev;
+        prev = current;
+        current = temp;
+    }
+        //update head and tail
+        head = newHead;
+        tail = newTail;
+}
+
+// print the list
 void List::display()
 {
     if (!head)
@@ -227,22 +258,25 @@ void List::display()
 int main()
 {
     List lst;
-    // lst.push_back(1);
-    // lst.push_back(2);
-    // lst.push_back(3);
-    // lst.push_back(4);
+    lst.push_back(1);
+    lst.push_back(2);
+    lst.push_back(3);
+    lst.push_back(4);
 
-    // lst.push_front(77);
+    lst.push_front(77);
 
-    // lst.pop_front();
+    lst.pop_front();
 
-    // lst.pop_back();
+    lst.pop_back();
 
-    // lst.pop(77);
+    lst.pop(77);
 
-    // lst.pop(1);
+    lst.pop(1);
 
-    lst.pop(3);
+    // lst.pop(3);
+
+    lst.reverse();
+    lst.reverse();
 
     cout << lst.size() << endl;
 

@@ -42,8 +42,9 @@ public:
     int celebrity(vector<vector<int>> &mat)
     {
         stack<int> st;
+        int size = int(mat.size());
         // Step 1
-        for (int i = 0; i < mat.size(); i++)
+        for (int i = 0; i < size; i++)
         {
             st.push(i);
         }
@@ -68,7 +69,7 @@ public:
         }
         // Step 3
         int famous = st.top();
-        for (int i = 0; i < mat.size(); i++)
+        for (int i = 0; i < size; i++)
         {
             if (i == famous)
                 continue;

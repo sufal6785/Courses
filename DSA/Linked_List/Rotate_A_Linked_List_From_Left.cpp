@@ -16,6 +16,7 @@ struct Node
 class Solution
 {
 public:
+    // rotate a list from left
     Node *rotate(Node *head, int k)
     {
         if (!head || !head->next)

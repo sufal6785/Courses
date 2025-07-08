@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 using namespace std;
+
+class PolarComplex;
 
 class ComplexNumber
 {
@@ -10,6 +13,20 @@ private:
 public:
     ComplexNumber() : real(0.0), imag(0.0) {}
     ComplexNumber(double real_, double imag_) : real(real_), imag(imag_) {}
+
+    operator PolarComplex() const;
+
+    // get real
+    double getReal()
+    {
+        return real;
+    }
+
+    // get imag
+    double getImag()
+    {
+        return imag;
+    }
 
     // display the complex number
     void display();
@@ -179,7 +196,47 @@ public:
     PolarComplex() : modulus(0.0), radianAngle(0.0) {};
 
     PolarComplex(double modulus_, double radianAngle_) : modulus(modulus_), radianAngle(radianAngle_) {};
+
+    operator ComplexNumber() const;
+
+    // get modulus
+    double getModulus()
+    {
+        return modulus;
+    }
+
+    // get radian Angle
+    double getAngle()
+    {
+        return radianAngle;
+    }
+
+    void display()
+    {
+        cout << "Modulus: " << modulus << endl
+             << "Radian Angle: " << radianAngle << endl;
+    }
 };
+
+// conversion section
+
+// to Polar
+ComplexNumber::operator PolarComplex() const
+{
+    double modulus = sqrt(real * real + imag * imag);
+    double angle = atan2(imag, real);
+
+    return PolarComplex(modulus, angle);
+}
+
+// to Cartesian
+PolarComplex::operator ComplexNumber() const
+{
+    double real = modulus * cos(radianAngle);
+    double imag = modulus * sin(radianAngle);
+
+    return ComplexNumber(real, imag);
+}
 
 int main()
 {
@@ -199,9 +256,15 @@ int main()
     // (a == b) ? cout << 1 : cout << 0;
     // cout << endl;
 
-    ComplexNumber a0(0, 0), ai(0, -12), b(3, -1), b0(4, 5);
+    // ComplexNumber a0(0, 0), ai(0, -12), b(3, -1), b0(4, 5);
     // cout << a0 << endl;
     // cout << ai << endl;
-    cout << b << endl;
-    cout << b0 << endl;
+    // cout << b << endl;
+    // cout << b0 << endl;
+
+    PolarComplex polar(5, 3.1416 / 3);
+    ComplexNumber cartesian = polar;
+
+    polar.display();
+    cout << cartesian << endl;
 }

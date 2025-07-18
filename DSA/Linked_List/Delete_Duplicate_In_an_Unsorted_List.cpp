@@ -32,22 +32,26 @@ public:
             return head;
 
         unordered_map<int, bool> seen; // Hash map to track seen values
-        Node *current = head, *prev = head;
+        Node *current = head, *prev = nullptr;
 
         while (current)
         {
             // If current node's data is already seen, remove the node
             if (seen[current->data])
             {
-                prev->next = current->next; // Skip the duplicate node
-                current = prev;             // Stay at prev for next iteration
+                // Remove duplicate node
+                prev->next = current->next;
+                Node *temp = current;
+                current = current->next;
+                delete temp; // Free memory
             }
             else
             {
-                seen[current->data] = true; // Mark data as seen
+                // First occurrence - mark as seen
+                seen[current->data] = true;
+                prev = current;
+                current = current->next;
             }
-            prev = current;                 // Move prev to current
-            current = current->next;        // Move to next node
         }
 
         return head; // Return the updated list head

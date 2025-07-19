@@ -13,71 +13,42 @@ struct Node
     }
 };
 
-class Solution
-{
-public:
-    Node *reverse(Node *head)
-    {
-        if (!head || !head->next)
-        {
-            return head;
-        }
-        Node *current = head, *prev = NULL;
-        while (current)
-        {
-            Node *temp = current->next;
-            current->next = prev;
-            prev = current;
-            current = temp;
-        }
-
-        return prev;
-    }
-
-    void push(Node **head, Node **tail, int data)
-    {
-        Node *newNode = new Node(data);
-        if (*head == NULL)
-        {
-            *head = *tail = newNode;
-        }
-        else
-        {
-            (*tail)->next = newNode;
-            *tail = newNode;
-        }
-    }
-
-    Node *addOne(Node *head)
-    {
-        // Your Code here
-        if (head == NULL)
-        {
-            return (new Node(1));
-        }
-        head = reverse(head);
-
-        Node *newHead = NULL, *newTail = NULL;
-        int carry = 1;
-        while (head && carry)
-        {
-            int sum = carry;
-            sum += head->data;
-            push(&newHead, &newTail, sum % 10);
-            carry = sum / 10;
-            head = head->next;
-        }
-        while (head)
-        {
-            push(&newHead, &newTail, head->data);
-            head = head->next;
-        }
-
-        if (carry)
-        {
-            push(&newHead, &newTail, carry);
+class Solution {
+  public:
+  
+    Node *reverse(Node *head){
+                Node *curr = head, *prev = nullptr, *temp;
+        while(curr){
+            temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
         }
         
-        return reverse(newHead);
+        return prev;
+    }
+    Node* addOne(Node* head) {
+
+        head = reverse(head);
+        
+        Node *prev = head;
+        int carry = 1;
+        
+        while(prev && carry){
+            int sum = carry;
+            if(prev){
+                sum += prev->data;
+                prev->data = sum%10;
+                carry = sum/10;
+                if(!prev->next && carry == 1){
+                    prev->next= new Node(1);
+                    prev = prev->next;
+                }
+                prev = prev->next;
+            }
+        }
+        
+        
+        return reverse(head);
     }
 };

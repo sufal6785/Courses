@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+// nlogn
 using namespace std;
 void merge(vector<int> &v, int left, int mid, int right);
 void mergeSort(vector<int> &v, int left, int right)

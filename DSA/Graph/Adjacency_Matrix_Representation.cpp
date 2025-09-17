@@ -14,6 +14,8 @@ using namespace std;
 //  ❌ Sparse graphs (wastes memory)
 //  ❌ Very large graphs (memory intensive)
 
+//Used when number of nodes less than 10^5
+
 int main()
 {
     int vertices, edges, u, v, queries;

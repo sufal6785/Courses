@@ -6,6 +6,8 @@
 #include <vector>
 using namespace std;
 
+// Space O(v+e)
+
 bool checkOn(vector<int> &v, int x)
 {
     for (auto val : v)

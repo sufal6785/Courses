@@ -1,55 +1,63 @@
 #include <iostream>
 #include <vector>
+// nlogn
 using namespace std;
-
-void merge(vector<int> &v, int start, int mid, int end)
+void merge(vector<int> &v, int left, int mid, int right);
+void mergeSort(vector<int> &v, int left, int right)
 {
-    int lp = start, rp = mid + 1;
-    vector<int> t;
-    while (lp <= mid && rp<=end)
+
+    if (left < right)
     {
-        if (v[lp] <= v[rp])
-        {
-            t.push_back(v[lp]);
-            lp++;
-        }
-        else
-        {
-            t.push_back(v[rp]);
-            rp++;
-        }
-    }
-    while (lp <= mid)
-    {
-        t.push_back(v[lp]);
-        lp++;
-    }
-    while (rp <= end)
-    {
-        t.push_back(v[rp]);
-        rp++;
-    }
-    for (int i = 0; i < end; i++)
-    {
-        v[start + i] = t[i];
+        int mid = left + (right - left) / 2;
+        mergeSort(v, left, mid);
+        mergeSort(v, mid + 1, right);
+        merge(v, left, mid, right);
     }
 }
 
-void divide(vector<int> &v, int start, int end)
+void merge(vector<int> &v, int left, int mid, int right)
 {
-    if (start == end)
-        return;
-    int mid = end - (end - start) / 2;
-    divide(v, start, mid);
-    divide(v, mid + 1, end);
-    merge(v, start, mid, end);
+    vector<int> temp;
+    int i = left;
+    int j = mid + 1;
+
+    while (i <= mid && j <= right)
+    {
+        if (v[i] <= v[j])
+        {
+            temp.push_back(v[i]);
+            i++;
+        }
+        else
+        {
+            temp.push_back(v[j]);
+            j++;
+        }
+    }
+
+    while (i <= mid)
+    {
+        temp.push_back(v[i]);
+
+        i++;
+    }
+    while (j <= right)
+    {
+        temp.push_back(v[j]);
+        j++;
+    }
+
+    for (size_t k = 0; k < temp.size(); k++)
+    {
+        v[left + k] = temp[k];
+    }
 }
 
 int main()
 {
-    vector<int> v = {5, 3, 1, 9, 4, -1, 2};
-    divide(v, 0, v.size() - 1);
-    for (auto val : v)
+    vector<int> v = {2, 7, 1, 1, 0, 2, 4, 5};
+    mergeSort(v, 0, v.size() - 1);
+    for (int val : v)
         cout << val << " ";
     cout << endl;
 }

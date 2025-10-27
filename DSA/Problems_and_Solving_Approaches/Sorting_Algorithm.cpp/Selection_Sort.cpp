@@ -2,6 +2,13 @@
 #include <vector>
 using namespace std;
 
+// Selection Sort Key Characteristics:
+// Always O(n²) comparisons - regardless of input order
+// Minimum number of swaps - at most n-1 swaps
+// Not stable - relative order of equal elements may change
+// In-place - O(1) extra space
+// Good when writes are expensive - minimizes swaps
+
 void selectionSort(vector<int> &v)
 {
     int size = v.size();

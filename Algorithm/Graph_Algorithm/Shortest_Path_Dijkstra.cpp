@@ -58,17 +58,14 @@ void dijkstra(int src, vector<int> &dis, PQ &pq, const vector<vector<int>> &weig
         auto node = pq.top();
         pq.pop();
         parent = node.second;
-        // cout << "Parent: " << parent << " " << dis[parent] << endl;
+        cout << "Parent: " << parent << " " << dis[parent] << " " << node.first << endl;
+        if (node.first != dis[parent]) // skip stale entry
+            continue;
         for (int child : adj[parent])
         {
             d = dis[parent] + weight[parent][child];
-            // cout << "D: " << child << " " << weight[parent][child] << " " << d << endl;
-            if (dis[child] == -1)
-            {
-                dis[child] = d;
-                pq.push({d, child});
-            }
-            if (dis[child] > d)
+            cout << "D: " << child << " " << weight[parent][child] << " " << d << endl;
+            if (dis[child] == -1 || dis[child] > d)
             {
                 dis[child] = d;
                 pq.push({d, child});
@@ -116,14 +113,14 @@ int main()
     cout << endl;
 }
 
-//weight_d.txt
-// 2 3 
-// 3 4
-// 2 4 5
-// 5
-// 4
-// 0 10 3 0 0
-// 0 0 1 2 0
-// 0 4 0 8 2
-// 0 0 0 0 7
-// 0 0 0 9 0
+// weight_d.txt
+//  2 3
+//  3 4
+//  2 4 5
+//  5
+//  4
+//  0 10 3 0 0
+//  0 0 1 2 0
+//  0 4 0 8 2
+//  0 0 0 0 7
+//  0 0 0 9 0

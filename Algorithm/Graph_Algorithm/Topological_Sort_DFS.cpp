@@ -3,9 +3,9 @@ using namespace std;
 
 vector<vector<int>> input(int n)
 {
-    // ifstream in("adj.txt");
-    // ifstream in("directed.txt");
-    ifstream in("DAG.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/adj.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/ DAG.txt");
     string line;
     vector<vector<int>> adj(n + 1);
     if (!in)

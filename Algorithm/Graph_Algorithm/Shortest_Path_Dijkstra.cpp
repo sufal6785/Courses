@@ -4,11 +4,11 @@ using PQ = priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<i
 
 pair<vector<vector<int>>, vector<vector<int>>> input(int n)
 {
-    // ifstream in("adj.txt");
-    // ifstream in("directed.txt");
-    // ifstream in("DAG.txt");
-    // ifstream in("weight_u.txt");
-    ifstream in("weight_d.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/adj.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/DAG.txt");
+    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/weight_u.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/weight_d.txt");
     string line;
     vector<vector<int>> adj(n + 1);
     vector<vector<int>> weight(n + 1, vector<int>(n + 1, 0));

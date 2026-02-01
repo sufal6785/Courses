@@ -4,8 +4,7 @@ using G = vector<vector<int>>;
 
 vector<vector<int>> input(int n)
 {
-    // ifstream in("adj.txt");
-    ifstream in("directed_scc.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed_scc.txt");
     string line;
     vector<vector<int>> adj(n + 1);
     if (!in)

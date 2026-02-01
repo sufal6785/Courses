@@ -37,7 +37,7 @@ pair<vector<int>, vector<int>> bfs(const vector<vector<int>> &adj, int src)
 
 vector<vector<int>> input(int n)
 {
-    ifstream in("adj.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/adj.txt");
     string line;
     vector<vector<int>> adj(n + 1);
     if (!in)
@@ -53,7 +53,6 @@ vector<vector<int>> input(int n)
         int val;
         while (iss >> val)
         {
-
             temp.push_back(val);
         }
         adj[i++] = temp;
@@ -63,7 +62,8 @@ vector<vector<int>> input(int n)
 
 int main()
 {
-    vector<vector<int>> adj = input(5);
+    int n = 6;
+    vector<vector<int>> adj = input(n);
 
     int src = 1;
     auto BFS = bfs(adj, src);
@@ -80,6 +80,13 @@ int main()
     for (size_t i = 1; i < distance.size(); i++)
         cout << distance[i] << " ";
     cout << endl;
+
+    // for (int i = 1; i <= n; i++)
+    // {
+    //     for (int x : adj[i])
+    //         cout << x << " ";
+    //     cout << endl;
+    // }
 
     return 0;
 }

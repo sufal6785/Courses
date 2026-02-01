@@ -52,8 +52,7 @@ vector<int> dfs(const vector<vector<int>> &adj, int src)
 
 vector<vector<int>> input(int n)
 {
-    // ifstream in("adj.txt");
-    ifstream in("directed.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
     string line;
     vector<vector<int>> adj(n + 1);
     if (!in)

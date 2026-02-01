@@ -3,7 +3,7 @@ using namespace std;
 
 tuple<int, int, vector<vector<pair<int, int>>>> input()
 {
-    ifstream in("mst.txt");
+    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/mst.txt");
     string line;
     int n, m, u, v, w;
     getline(in, line);

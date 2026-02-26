@@ -1,87 +1,123 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> input(int n)
-{
-    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
-    string line;
-    vector<vector<int>> adj(n + 1);
-    if (!in)
-    {
-        cerr << "Error\n";
-        return adj;
-    }
-    int i = 1;
-    while (i <= n && getline(in, line))
-    {
-        istringstream iss(line);
-        vector<int> temp;
-        int val;
-        while (iss >> val)
-        {
+const int MAXN = 1e5 + 5;
+vector<int> adj[MAXN];
+int color[MAXN];
+int parent[MAXN];
+pair<int, int> duration[MAXN];
+int curTime = 1;
+int V, E;
 
-            temp.push_back(val);
+void printGraph() {
+    cout << "\n--- Graph ---\n";
+    for (int u = 1; u <= V; u++) {
+        cout << u << " : { ";
+        for (int v : adj[u]) {
+            cout << v << " ";
         }
-        adj[i++] = temp;
+        cout << "}\n";
     }
-    return adj;
 }
 
-int cur_time = 1;
-void dfs(int parent, vector<int> &color, vector<int> &path, vector<pair<int, int>> &duration, const vector<vector<int>> &adj)
-{
-    color[parent] = 1;
-    duration[parent].first = cur_time++;
-    for (int child : adj[parent])
-    {
-        if (color[child] == 0)
-        {
-            path[child] = parent;          // set parent before recursing
-            dfs(child, color, path, duration, adj);
-        }
-    }
-    color[parent] = 2;
-    duration[parent].second = cur_time++;
+void printEdge(int u, int v) {
+    cout << "Edge: " << u << " -> " << v << "\n";
 }
 
-void printPath(int src, int u, const vector<int> &path, const vector<vector<int>> &adj)
-{
-
-    if (src == u)
-        cout << u << " ";
-    else if (path[u] == -1)
-    {
+void printPath(int src, int v) {
+    if (parent[v] == -1) {
+        cout << v;
         return;
     }
-    else
-    {
-        printPath(src, path[u], path, adj);
-        cout << u << " ";
-    }
+    printPath(src, parent[v]);
+    cout << " -> " << v;
 }
 
-int main()
-{
-    int n = 6;
-    vector<vector<int>> adj = input(n);
-    int src = 1;
-
-    vector<int> path(n + 1, -1);
-    vector<int> color(n + 1, 0); // 0=white,1=gray,2=black
-    vector<pair<int, int>> duration(n + 1, {0, 0});
-    cur_time = 1; // reset before each run
-    dfs(src, color, path, duration, adj);
-    for (int x : path)
-    {
-        cout << x << " ";
+void input() {
+    ifstream in("input/directed.txt");
+    
+    int u, v;
+    in >> V >> E;
+    
+    for (int i = 0; i < E; i++) {
+        in >> u >> v;
+        adj[u].push_back(v);
     }
-    cout << endl;
+    in.close();
+}
 
-    for (int i = 1; i <= n; i++)
-    {
-        auto x = duration[i];
-        cout << i << ": " << x.first << " " << x.second << endl;
+void dfs(int u) {
+    color[u] = 1;  // Gray (visiting)
+    duration[u].first = curTime++;
+    
+    cout << "Visiting: " << u << "\n";
+    for (int v : adj[u]) {
+        if (color[v] == 0) {  // White (unvisited)
+            parent[v] = u;
+            dfs(v);
+        }
     }
+    color[u] = 2;  // Black (finished)
+    duration[u].second = curTime++;
+}
 
-    printPath(1, n, path, adj);
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    input();
+    
+    cout << "V = " << V << ", E = " << E << "\n";
+    printGraph();
+    
+    // Print all edges
+    cout << "\n--- All Edges ---\n";
+    for (int u = 1; u <= V; u++) {
+        for (int v : adj[u]) {
+            printEdge(u, v);
+        }
+    }
+    
+    // Initialize arrays
+    for (int i = 1; i <= V; i++) {
+        color[i] = 0;
+        parent[i] = -1;
+        duration[i] = {0, 0};
+    }
+    curTime = 1;
+    
+    // Run DFS
+    cout << "\n--- DFS Traversal ---\n";
+    for (int u = 1; u <= V; u++) {
+        if (color[u] == 0) {
+            dfs(u);
+        }
+    }
+    
+    // Print parent array
+    cout << "\n--- Parent Array ---\n";
+    for (int i = 1; i <= V; i++) {
+        cout << i << ": " << parent[i] << "\n";
+    }
+    
+    // Print discovery and finish times
+    cout << "\n--- Discovery and Finish Times ---\n";
+    for (int i = 1; i <= V; i++) {
+        cout << "Vertex " << i << ": discovery = " << duration[i].first 
+             << ", finish = " << duration[i].second << "\n";
+    }
+    
+    // Print paths from source
+    cout << "\n--- Paths from Source (1) ---\n";
+    for (int u = 1; u <= V; u++) {
+        cout << "1 -> " << u << ": ";
+        if (parent[u] == -1 && u != 1) {
+            cout << "No path\n";
+        } else {
+            printPath(1, u);
+            cout << "\n";
+        }
+    }
+    
+    return 0;
 }

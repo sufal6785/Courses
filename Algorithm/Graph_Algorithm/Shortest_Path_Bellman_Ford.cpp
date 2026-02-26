@@ -2,7 +2,7 @@
 using namespace std;
 
 const int MAXN = 1e5 + 5;
-vector<pair<int, int>> adj[MAXN];  // {vertex, weight}
+vector<pair<int, int>> adj[MAXN]; // {vertex, weight}
 int dis[MAXN];
 int parent[MAXN];
 int V, E;
@@ -28,20 +28,20 @@ void printEdge(int u, int v, int w)
     cout << "Edge: " << u << " -> " << v << " ( weight: " << w << ")\n";
 }
 
-void printPath(int src, int v)
+void printPath(int v)
 {
     if (parent[v] == -1)
     {
         cout << v;
         return;
     }
-    printPath(src, parent[v]);
+    printPath(parent[v]);
     cout << " -> " << v;
 }
 
 void input()
 {
-    ifstream in("input/weight_u.txt");
+    ifstream in("input/weight_d_nc.txt");
 
     int u, v, w;
     in >> V >> E;
@@ -49,23 +49,14 @@ void input()
     for (int i = 0; i < E; i++)
     {
         in >> u >> v >> w;
-        
-        // Validation: Dijkstra requires non-negative weights
-        if (w < 0)
-        {
-            cerr << "Error: Negative weight detected! Dijkstra's algorithm requires non-negative weights.\n";
-            exit(1);
-        }
-
         adj[u].push_back({v, w});
-        adj[v].push_back({u, w});
     }
     in.close();
 }
 
-void dijkstra(int src)
+void bellmanFord(int src)
 {
-    // Initialize distance and parent arrays
+    // Initialize distances and parent
     for (int i = 1; i <= V; i++)
     {
         dis[i] = INT_MAX;
@@ -73,32 +64,64 @@ void dijkstra(int src)
     }
     dis[src] = 0;
 
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, src});
+    cout << "\n--- Bellman-Ford Iteration ---\n";
+    cout << "i = 0: ";
+    for (int i = 1; i <= V; i++)
+        cout << dis[i] << " ";
+    cout << "\n";
 
-    cout << "\n--- Dijkstra's Algorithm ---\n";
-    while (!pq.empty())
+    // Phase 1: Relax edges V-1 times
+    for (int i = 1; i < V; i++)
     {
-        int d = pq.top().first;
-        int u = pq.top().second;
-        pq.pop();
+        cout << "i = " << i << ": ";
+        for (int u = 1; u <= V; u++)
+        {
+            if (dis[u] == INT_MAX)
+                continue;
+            for (auto edge : adj[u])
+            {
+                int v = edge.first;
+                int w = edge.second;
+                if (dis[u] + w < dis[v])
+                {
+                    dis[v] = dis[u] + w;
+                    parent[v] = u;
+                }
+            }
+        }
 
-        if (d > dis[u])
+        for (int j = 1; j <= V; j++)
+            cout << dis[j] << " ";
+        cout << "\n";
+    }
+
+    // Phase 2: Check for negative cycles
+    cout << "\n--- Checking for Negative Cycle ---\n";
+    bool hasNegativeCycle = false;
+    for (int u = 1; u <= V; u++)
+    {
+        if (dis[u] == INT_MAX)
             continue;
-
-        cout << "Visiting: " << u << " (distance: " << dis[u] << ")\n";
         for (auto edge : adj[u])
         {
             int v = edge.first;
             int w = edge.second;
-
-            if (dis[v] > dis[u] + w)
+            if (dis[u] + w < dis[v])
             {
-                dis[v] = dis[u] + w;
+                dis[v] = INT_MIN;
+                hasNegativeCycle = true;
                 parent[v] = u;
-                pq.push({dis[v], v});
             }
         }
+    }
+
+    if (hasNegativeCycle)
+    {
+        cout << "Negative cycle detected!\n";
+    }
+    else
+    {
+        cout << "No negative cycle found.\n";
     }
 }
 
@@ -120,22 +143,20 @@ int main()
         {
             int v = edge.first;
             int w = edge.second;
-            if (u < v)  // Print each edge once for undirected graph
-            {
-                printEdge(u, v, w);
-            }
+            printEdge(u, v, w);
         }
     }
 
     int src = 1;
-    dijkstra(src);
+    bellmanFord(src);
 
-    // Print shortest distances from source
     cout << "\n--- Shortest Distances from Source (" << src << ") ---\n";
     for (int i = 1; i <= V; i++)
     {
         if (dis[i] == INT_MAX)
             cout << i << ": INF\n";
+        else if (dis[i] == INT_MIN)
+            cout << i << ": Negative Cycle\n";
         else
             cout << i << ": " << dis[i] << "\n";
     }
@@ -156,9 +177,13 @@ int main()
         {
             cout << "No path (INF)\n";
         }
+        else if (dis[u] == INT_MIN)
+        {
+            cout << "Negative Cycle\n";
+        }
         else
         {
-            printPath(src, u);
+            printPath(u);
             cout << " (distance: " << dis[u] << ")\n";
         }
     }

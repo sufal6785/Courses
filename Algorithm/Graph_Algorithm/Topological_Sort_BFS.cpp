@@ -1,50 +1,71 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> input(int n)
-{
-    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/adj.txt");
-    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
-    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/DAG.txt");
-    string line;
-    vector<vector<int>> adj(n + 1);
-    if (!in)
-    {
-        cerr << "Error\n";
-        return adj;
-    }
-    int i = 1;
-    while (i <= n && getline(in, line))
-    {
-        istringstream iss(line);
-        vector<int> temp;
-        int val;
-        while (iss >> val)
-        {
+const int MAXN = 1e5 + 5;
+vector<int> adj[MAXN];
+int indegree[MAXN];
+int V, E;
 
-            temp.push_back(val);
+void printGraph()
+{
+    cout << "\n--- Graph ---\n";
+    for (int u = 1; u <= V; u++)
+    {
+        cout << u << " : { ";
+        for (int v : adj[u])
+        {
+            cout << v << " ";
         }
-        adj[i++] = temp;
+        cout << "}\n";
     }
-    return adj;
 }
 
-int main()
+void printEdge(int u, int v)
 {
-    int n = 7;
-    auto adj = input(n);
+    cout << "Edge: " << u << " -> " << v << "\n";
+}
 
-    vector<int> indegree(n + 1, 0);
-    for (int i = 1; i <= n; i++)
+void input()
+{
+    ifstream in("input/DAG.txt");
+
+    int u, v;
+    in >> V >> E;
+
+    for (int i = 0; i < E; i++)
     {
-        for (int child : adj[i])
+        in >> u >> v;
+        adj[u].push_back(v);
+    }
+    in.close();
+}
+
+vector<int> topologicalSortBFS()
+{
+    // Calculate indegree for all vertices
+    for (int i = 1; i <= V; i++)
+    {
+        indegree[i] = 0;
+    }
+
+    for (int u = 1; u <= V; u++)
+    {
+        for (int v : adj[u])
         {
-            indegree[child]++;
+            indegree[v]++;
         }
     }
 
+    // Print indegree array
+    cout << "\n--- Indegree Array ---\n";
+    for (int i = 1; i <= V; i++)
+    {
+        cout << i << ": " << indegree[i] << "\n";
+    }
+
+    // Add all vertices with indegree 0 to queue
     queue<int> q;
-    for (int i = 1; i <= n; i++)
+    for (int i = 1; i <= V; i++)
     {
         if (indegree[i] == 0)
         {
@@ -54,27 +75,70 @@ int main()
 
     if (q.empty())
     {
-        cerr << "Not a valid DAG" << endl;
+        cerr << "\nError: Not a valid DAG (no vertex with indegree 0)\n";
+        return {};
     }
 
     vector<int> result;
+    cout << "\n--- Topological Sort (Kahn's Algorithm - BFS) ---\n";
     while (!q.empty())
     {
-        int parent = q.front();
+        int u = q.front();
         q.pop();
-        result.push_back(parent);
+        result.push_back(u);
 
-        for (int child : adj[parent])
+        cout << "Processing: " << u << "\n";
+        for (int v : adj[u])
         {
-            indegree[child]--;
-            if (indegree[child] == 0)
+            indegree[v]--;
+            if (indegree[v] == 0)
             {
-                q.push(child);
+                q.push(v);
             }
         }
     }
 
-    for (int x : result)
-        cout << x << " ";
-    cout << endl;
+    // Check if all vertices are included (cycle detection)
+    if (result.size() != V)
+    {
+        cerr << "\nError: Graph contains a cycle! Not a DAG.\n";
+        return {};
+    }
+
+    return result;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    input();
+
+    cout << "V = " << V << ", E = " << E << "\n";
+    printGraph();
+
+    // Print all edges
+    cout << "\n--- All Edges ---\n";
+    for (int u = 1; u <= V; u++)
+    {
+        for (int v : adj[u])
+        {
+            printEdge(u, v);
+        }
+    }
+
+    vector<int> result = topologicalSortBFS();
+
+    if (!result.empty())
+    {
+        cout << "\n--- Topological Order ---\n";
+        for (int u : result)
+        {
+            cout << u << " ";
+        }
+        cout << "\n";
+    }
+
+    return 0;
 }

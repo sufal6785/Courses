@@ -1,50 +1,85 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> input(int n)
-{
-    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/adj.txt");
-    // ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/directed.txt");
-    ifstream in("e:/DSA/C_Based_Implementation/Algorithm/Graph_Algorithm/input/DAG.txt");
-    string line;
-    vector<vector<int>> adj(n + 1);
-    if (!in)
-    {
-        cerr << "Error\n";
-        return adj;
-    }
-    int i = 1;
-    while (i <= n && getline(in, line))
-    {
-        istringstream iss(line);
-        vector<int> temp;
-        int val;
-        while (iss >> val)
-        {
+const int MAXN = 1e5 + 5;
+vector<int> adj[MAXN];
+int dis[MAXN];
+int parent[MAXN];
+int V, E;
 
-            temp.push_back(val);
+void printGraph()
+{
+    cout << "\n--- Graph ---\n";
+    for (int u = 1; u <= V; u++)
+    {
+        cout << u << " : { ";
+        for (int v : adj[u])
+        {
+            cout << v << " ";
         }
-        adj[i++] = temp;
+        cout << "}\n";
     }
-    return adj;
 }
 
-void short_path(int src, vector<int> &dis, vector<int> &path, const vector<vector<int>> &adj)
+void printEdge(int u, int v)
 {
+    cout << "Edge: " << u << " -> " << v << "\n";
+}
+
+void printPath(int src, int v)
+{
+    if (parent[v] == -1)
+    {
+        cout << v;
+        return;
+    }
+    printPath(src, parent[v]);
+    cout << " -> " << v;
+}
+
+void input()
+{
+    ifstream in("input/directed.txt");
+
+    int u, v;
+    in >> V >> E;
+
+    for (int i = 0; i < E; i++)
+    {
+        in >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    in.close();
+}
+
+void bfsShortestPath(int src)
+{
+    // Initialize distance and parent arrays
+    for (int i = 1; i <= V; i++)
+    {
+        dis[i] = -1;
+        parent[i] = -1;
+    }
+
     queue<int> q;
     q.push(src);
     dis[src] = 0;
+
+    cout << "\n--- BFS Shortest Path ---\n";
     while (!q.empty())
     {
-        int parent = q.front();
+        int u = q.front();
         q.pop();
-        for (int child : adj[parent])
+
+        cout << "Visiting: " << u << "\n";
+        for (int v : adj[u])
         {
-            if (dis[child] == -1)
+            if (dis[v] == -1)
             {
-                q.push(child);
-                dis[child] = dis[parent] + 1;
-                path[child] = parent;
+                q.push(v);
+                dis[v] = dis[u] + 1;
+                parent[v] = u;
             }
         }
     }
@@ -52,39 +87,62 @@ void short_path(int src, vector<int> &dis, vector<int> &path, const vector<vecto
 
 int main()
 {
-    int n = 7;
-    vector<vector<int>> adj = input(n);
-    // for (int i = 0; i < adj.size(); i++)
-    // {
-    //     for (int x : adj[i])
-    //         cout << x << " ";
-    //     cout << endl;
-    // }
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-    vector<int> dis(n + 1, -1);
-    vector<int> path(n + 1, 0);
-    int src = 1;
-    short_path(src, dis, path, adj);
-    for (int i = 1; i <= n; i++)
+    input();
+
+    cout << "V = " << V << ", E = " << E << "\n";
+    printGraph();
+
+    // Print all edges
+    cout << "\n--- All Edges ---\n";
+    for (int u = 1; u <= V; u++)
     {
-        cout << dis[i] << " ";
-    }
-    cout << endl;
-
-    for (int i = 1; i <= n; i++)
-    {
-
-        cout << i << ": ";
-        int parent = path[i];
-        while (parent)
+        for (int v : adj[u])
         {
-            cout << parent << " ";
-            if (parent == src)
-                break;
-            parent = path[parent];
+            if (u < v)  // Print each edge once for undirected graph
+            {
+                printEdge(u, v);
+            }
         }
-
-        cout << endl;
     }
-    cout << endl;
+
+    int src = 1;
+    bfsShortestPath(src);
+
+    // Print distances from source
+    cout << "\n--- Shortest Distances from Source (" << src << ") ---\n";
+    for (int i = 1; i <= V; i++)
+    {
+        if (dis[i] == -1)
+            cout << i << ": INF\n";
+        else
+            cout << i << ": " << dis[i] << "\n";
+    }
+
+    // Print parent array
+    cout << "\n--- Parent Array ---\n";
+    for (int i = 1; i <= V; i++)
+    {
+        cout << i << ": " << parent[i] << "\n";
+    }
+
+    // Print shortest paths from source
+    cout << "\n--- Shortest Paths from Source (" << src << ") ---\n";
+    for (int u = 1; u <= V; u++)
+    {
+        cout << src << " -> " << u << ": ";
+        if (dis[u] == -1)
+        {
+            cout << "No path\n";
+        }
+        else
+        {
+            printPath(src, u);
+            cout << " (distance: " << dis[u] << ")\n";
+        }
+    }
+
+    return 0;
 }

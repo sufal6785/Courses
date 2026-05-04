@@ -17,6 +17,8 @@ ll partition(vector<ll> &v, ll low, ll high)
     {
         if (v[i] > pivot)
         {
+            // Those who are bigger than the pivot go last.
+            // (To the right of the pivot)
             swap(v[i], v[k]);
             k--;
         }
@@ -35,6 +37,8 @@ ll partition_last(vector<ll> &v, ll low, ll high)
     {
         if (v[i] < pivot)
         {
+            // Those who are smaller than the pivot go to the beginning.
+            // (To the left of the pivot)
             swap(v[i], v[k]);
             k++;
         }

@@ -1,23 +1,44 @@
-name: C/C++ CI
+name: C++ Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "algo" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "algo" ]
+  workflow_dispatch:
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: g++ -std=c++17 -O2 -Wall -Wextra Algorithm/Subarray/Maximum_Sum_1D.cpp -o max_sum
+
+      - name: Run test cases
+        run: |
+          run_test() {
+            input="$1"
+            expected="$2"
+
+            output=$(printf "%b" "$input" | ./max_sum)
+            result=$(printf "%s\n" "$output" | tail -n 1)
+
+            if [ "$result" != "$expected" ]; then
+              echo "Test failed"
+              echo "Input:"
+              printf "%b\n" "$input"
+              echo "Expected: $expected"
+              echo "Got: $result"
+              echo "Full output:"
+              printf "%s\n" "$output"
+              exit 1
+            fi
+          }
+
+          run_test "5\n-2 1 -3 4 -1\n" "4"
+          run_test "4\n-5 -1 -8 -9\n" "-1"
+          run_test "1\n7\n" "7"
+          run_test "6\n1 2 3 -2 5 -1\n" "9"

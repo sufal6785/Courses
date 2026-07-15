@@ -68,8 +68,6 @@ int main()
 {
     cin >> n;
 
-    // v.resize(n);
-
     for (int i = 0; i < n; ++i)
         cin >> v[i];
     cout << divide_count(0, n - 1) << "\n";

@@ -12,9 +12,9 @@ int main()
     for (auto &i : v)
         cin >> i;
 
-    ll maxSum = LLONG_MIN;
+    ll maxSum = 0;
 
-    ll currSum = LLONG_MIN;
+    ll currSum = 0;
 
     for(auto i = 0;i<n;i++){
         currSum = max(v[i], v[i] + currSum);

@@ -9,22 +9,33 @@ int main()
     cin >> n;
 
     vector<ll> v(n);
-    for (auto &i : v)
-        cin >> i;
+    for (auto &i : v) cin >> i;
 
-    ll maxSum = 0;
+    ll maxSum = v[0];
+    ll currSum = v[0];
 
-    ll currSum = 0;
+    ll start = 0, end = 0, tempStart = 0;
 
-    for(auto i = 0;i<n;i++){
-        currSum = max(v[i], v[i] + currSum);
-        maxSum = max(currSum, maxSum);
-        // cout<<"i = "<<v[i]<< " "<<"cur = "<<currSum<<" "<<"max = "<<maxSum<<"\n";
+    for (ll i = 1; i < n; i++)
+    {
+        if (v[i] > currSum + v[i])
+        {
+            currSum = v[i];
+            tempStart = i;
+        }
+        else
+        {
+            currSum += v[i];
+        }
+
+        if (currSum > maxSum)
+        {
+            maxSum = currSum;
+            start = tempStart;
+            end = i;
+        }
     }
 
-    cout<<maxSum<<"\n";
-
-    // for (auto &o : v)
-    //     cout << o << " ";
-    // cout << "\n";
+    cout << maxSum << " " << start << " " << end << "\n";
+    return 0;
 }

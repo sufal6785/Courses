@@ -22,8 +22,8 @@ ll powMod(ll x, ll n, ll m)
 }
 int main()
 {
-    ll n, x, m;
-    cin >> x >> n >> m;
+    ll n, x, m = 1000000007LL;
+    cin >> x >> n;
 
     cout << powMod(x, n, m) << endl;
 }

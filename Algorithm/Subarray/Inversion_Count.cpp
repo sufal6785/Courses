@@ -70,7 +70,11 @@ int main()
 
     for (int i = 0; i < n; ++i)
         cin >> v[i];
-    cout << divide_count(0, n - 1) << "\n";
+    cout << divide_count(0, n - 1) << "\n"; 
+    // -> included [0,n-1] -> [0,7] size = 8 so n1 = 4 n2 = 4
+    // -> l = 0, r = 7, mid = 3; n1 = mid - l + 1 = 4, n2 = r - mid = 4
+    // -> Left = [l -> mid] = 0, 1, 2, 3
+    // -> right = [mid + 1 -> r] = 4, 5, 6, 7
     // cout << inv() << endl;
     return 0;
 }
